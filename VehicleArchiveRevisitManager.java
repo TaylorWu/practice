@@ -55,9 +55,10 @@ public class VehicleArchiveRevisitManager {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<Object> query = builder.createQuery();
         Root<VehicleArchiveRevisit> root = query.from(VehicleArchiveRevisit.class);
-        query.multiselect(root.get("revisitPerson"), builder.count(root.get("vehicleArchive")));
+        query.multiselect(root.get("revisitPerson"), builder.count(root.get("id")));
         query.groupBy(root.get("revisitPerson"));
         query.where(spec.toPredicate(root, query, builder));
+        query.orderBy(builder.desc(builder.count(root.get("id"))));
         return em.createQuery(query).getResultList();
     }
 }
